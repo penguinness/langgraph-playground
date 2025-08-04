@@ -1,18 +1,24 @@
 // agent.mts
-
 import dotenv from 'dotenv';
-import { TavilySearch } from '@langchain/tavily';
+import { TavilySearchResults } from '@langchain/community/tools/tavily_search';
 import { ChatOpenAI } from '@langchain/openai';
 import { MemorySaver } from '@langchain/langgraph';
 import { HumanMessage } from '@langchain/core/messages';
 import { createReactAgent } from '@langchain/langgraph/prebuilt';
 
-// Load environment variables
+// Load environment variables from .env file
 dotenv.config();
 
 // Define the tools for the agent to use
-const agentTools = [new TavilySearch({ maxResults: 3 })];
-const agentModel = new ChatOpenAI({ temperature: 0 });
+const agentTools = [
+  new TavilySearchResults({
+    maxResults: 3,
+  }),
+];
+
+const agentModel = new ChatOpenAI({
+  temperature: 0,
+});
 
 // Initialize memory to persist state between graph runs
 const agentCheckpointer = new MemorySaver();
